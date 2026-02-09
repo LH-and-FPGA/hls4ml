@@ -53,7 +53,7 @@ DEFAULT_PRECISION = "ap_fixed<32,16>"
 # PYNQ-Z2 has 220 DSPs and 53K LUTs.
 # Linear(1536,128) fully parallel needs 196K multipliers — impossible.
 # reuse_factor=256 → ~768 multipliers/cycle (shared via LUTs). Adjust as needed.
-DEFAULT_REUSE_FACTOR = 128
+DEFAULT_REUSE_FACTOR = 768
 STRATEGY = "Resource"  # "Latency" won't fit on PYNQ-Z2 for this model
 
 
@@ -198,7 +198,9 @@ def convert_to_hls(pt_model, model_name, output_dir):
     hidden = pt_model.fc1.out_features  # 128 or 64
 
     # With 2D input, Dense layers map natively (no Conv1D conversion).
-    # ReuseFactor must divide into n_in * n_out for Dense Resource strategy.
+    # ReuseFactor must divide n_in * n_out for Dense Resource strategy.
+    # fc2/fc3 have n_in=hidden, so their RF is capped at hidden.
+    # fc1 has n_in=1536, so it can use the full DEFAULT_REUSE_FACTOR.
     safe_rf = min(DEFAULT_REUSE_FACTOR, hidden)
 
     config = hls4ml.utils.config_from_pytorch_model(
@@ -209,6 +211,12 @@ def convert_to_hls(pt_model, model_name, output_dir):
         granularity="name",
     )
     config["Model"]["Strategy"] = STRATEGY
+
+    # ── Per-layer ReuseFactor for fc1 ──
+    # fc1 (1536→hidden) can use a larger RF since n_in=1536 >> hidden.
+    fc1_rf = DEFAULT_REUSE_FACTOR  # 1024
+    if "fc1" in config.get("LayerName", {}):
+        config["LayerName"]["fc1"]["ReuseFactor"] = fc1_rf
 
     # ── LayerNorm precision ──
     # Wider accum for variance computation accuracy, and wider table for 1/sqrt.
@@ -224,7 +232,7 @@ def convert_to_hls(pt_model, model_name, output_dir):
 
     print(f"\n  hls4ml config for '{model_name}':")
     print(f"    Precision:    {DEFAULT_PRECISION}")
-    print(f"    ReuseFactor:  {safe_rf} (capped from {DEFAULT_REUSE_FACTOR} by hidden_size={hidden})")
+    print(f"    ReuseFactor:  fc1={fc1_rf}, others={safe_rf}")
     print(f"    Strategy:     {STRATEGY}")
     print(f"    FPGA Part:    {FPGA_PART}")
     print(f"    Clock:        {CLOCK_PERIOD} ns")

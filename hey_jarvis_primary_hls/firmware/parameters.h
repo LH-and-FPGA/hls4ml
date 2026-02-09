@@ -34,7 +34,7 @@ struct config2 : nnet::dense_config {
     static const unsigned n_out = 128;
     static const unsigned io_type = nnet::io_parallel;
     static const unsigned strategy = nnet::resource;
-    static const unsigned reuse_factor = 128;
+    static const unsigned reuse_factor = 768;
     static const unsigned n_zeros = 0;
     static const unsigned n_nonzeros = 196608;
     static const unsigned multiplier_limit = DIV_ROUNDUP(n_in * n_out, reuse_factor) - n_zeros / reuse_factor;
