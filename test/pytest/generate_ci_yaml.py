@@ -28,14 +28,7 @@ BLACKLIST = {'test_reduction'}
 
 # Long-running tests will not be bundled with other tests
 LONGLIST = {'test_hgq_layers', 'test_hgq_players', 'test_qkeras', 'test_pytorch_api'}
-KERAS3_LIST = {
-    'test_keras_v3_api',
-    'test_hgq2_mha',
-    'test_einsum_dense',
-    'test_qeinsum',
-    'test_multiout_onnx',
-    'test_keras_v3_profiling',
-}
+KERAS3_LIST = {'test_keras_v3_api', 'test_hgq2_mha', 'test_einsum_dense', 'test_qeinsum', 'test_multiout_onnx'}
 
 # Test files to split by individual test cases
 # Value = chunk size per CI job

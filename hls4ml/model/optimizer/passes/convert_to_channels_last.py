@@ -44,21 +44,33 @@ class ChannelsLastConverter(OptimizerPass):
                 input_shape.append(input_shape.pop(0))
                 node.get_output_variable().shape = input_shape
         elif isinstance(node, LayerNormalization):
-            # LayerNorm only works on the last dimension in PyTorch
-            perm = [1, 0]
-            pre_transpose = model.make_node(
-                'Transpose', f'pre_transpose_for_{node.get_attr("name")}', {'perm': perm}, [node.get_input_node().name]
-            )
-            pre_transpose.channels_last_converted = True
-            model.insert_node(pre_transpose)
-
-            # If not the output layer, transpose again
-            if node.get_attr('name') not in model.outputs or model.config.config['HLSConfig']['Model']['TransposeOutputs']:
-                post_transpose = model.make_node(
-                    'Transpose', f'post_transpose_for_{node.get_attr("name")}', {'perm': perm}, [node.name]
+            if len(outshape) > 1:
+                # Multi-dimensional: transpose around LayerNorm so it operates on the last axis
+                perm = [1, 0]
+                pre_transpose = model.make_node(
+                    'Transpose',
+                    f'pre_transpose_for_{node.get_attr("name")}',
+                    {'perm': perm},
+                    [node.get_input_node().name],
                 )
-                post_transpose.channels_last_converted = True
-                model.insert_node(post_transpose)
+                pre_transpose.channels_last_converted = True
+                model.insert_node(pre_transpose)
+
+                # If not the output layer, transpose again
+                if (
+                    node.get_attr('name') not in model.outputs
+                    or model.config.config['HLSConfig']['Model']['TransposeOutputs']
+                ):
+                    post_transpose = model.make_node(
+                        'Transpose',
+                        f'post_transpose_for_{node.get_attr("name")}',
+                        {'perm': perm},
+                        [node.name],
+                    )
+                    post_transpose.channels_last_converted = True
+                    model.insert_node(post_transpose)
+            # For 1D output (2D input with batch): normalization is over the entire
+            # feature vector, no channel reordering needed — skip transpose insertion.
         elif isinstance(node, LSTM) or isinstance(node, GRU):
             pass
         else:

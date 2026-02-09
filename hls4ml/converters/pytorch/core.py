@@ -177,14 +177,19 @@ def parse_layernorm_layer(operation, layer_name, input_names, input_shapes, node
         in_size *= dim
     layer['n_in'] = layer['n_out'] = in_size
 
-    if not ((len(input_shapes[0])) == 3):
+    ndim = len(input_shapes[0])
+    if ndim == 3:
+        layer['seq_len'] = input_shapes[0][-2]
+        layer['axis'] = 2
+    elif ndim == 2:
+        # 2D input: [batch, features] — treat as seq_len=1
+        layer['seq_len'] = 1
+        layer['axis'] = 1
+    else:
         raise Exception(
             f'Input shape {input_shapes[0]} is not currently supported for LayerNorm; '
-            'only three-dimensional inputs (including batch dimension) are supported'
+            'only two- or three-dimensional inputs (including batch dimension) are supported'
         )
-    layer['seq_len'] = input_shapes[0][-2]
-
-    layer['axis'] = 2
 
     layer['gamma_data'] = class_object.weight.data.numpy()
     layer['beta_data'] = class_object.bias.data.numpy()
