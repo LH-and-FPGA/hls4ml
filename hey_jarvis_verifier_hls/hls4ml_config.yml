@@ -8,7 +8,7 @@ HLSConfig:
         bias: auto
         result: auto
         weight: auto
-      ReuseFactor: 768
+      ReuseFactor: 1536
       Trace: false
     fc2:
       Precision:
@@ -27,15 +27,15 @@ HLSConfig:
         accum: ap_fixed<48,24>
         default: ap_fixed<16,10>
       Trace: false
-      table_size: 8192
-      table_t: ap_fixed<48,24>
+      table_size: 1024
+      table_t: ap_fixed<18,8>
     ln2:
       Precision:
         accum: ap_fixed<48,24>
         default: ap_fixed<16,10>
       Trace: false
-      table_size: 8192
-      table_t: ap_fixed<48,24>
+      table_size: 1024
+      table_t: ap_fixed<18,8>
     relu1:
       Precision:
         result: auto
@@ -128,8 +128,8 @@ PytorchModel: !!python/object:__main__.WakeWordSubModel
               gAKKCmz8nEb5IGqoUBkugAJN6QMugAJ9cQAoWBAAAABwcm90b2NvbF92ZXJzaW9ucQFN6QNYDQAA
               AGxpdHRsZV9lbmRpYW5xAohYCgAAAHR5cGVfc2l6ZXNxA31xBChYBQAAAHNob3J0cQVLAlgDAAAA
               aW50cQZLBFgEAAAAbG9uZ3EHSwR1dS6AAihYBwAAAHN0b3JhZ2VxAGN0b3JjaApGbG9hdFN0b3Jh
-              Z2UKcQFYCQAAADM2OTE3MDgzMnECWAMAAABjcHVxA0tATnRxBFEugAJdcQBYCQAAADM2OTE3MDgz
-              MnEBYS5AAAAAAAAAAOqCCT2k/M88MIeaOsM8TjwZr4E58IO3PDCMVTx3nf48EqdrvB0BFDziAKc8
+              Z2UKcQFYCQAAADIyNzAzOTM3NnECWAMAAABjcHVxA0tATnRxBFEugAJdcQBYCQAAADIyNzAzOTM3
+              NnEBYS5AAAAAAAAAAOqCCT2k/M88MIeaOsM8TjwZr4E58IO3PDCMVTx3nf48EqdrvB0BFDziAKc8
               vJkKPSwVYrs3M4E8xHrxPPCugjxgx5A8VhqIO9SHJDsvyMQ8s2LXPAwt2zuF/Gc7U7PQO8Yxjrxn
               JsQ6mCEkvM61xzz+Moo82PESOQ4tZ7vZKCw80a8gO9pSfDsYztM8AfzWvCLimLyRyge8Bb9EPA1Q
               FD3pAHQ8DCzUO6Y+RbxMSVE8MmZrPGn7tDy+Rpw8Ls49PCVVgzwXoyU82cGtuz5vFzw33uK83yiR
@@ -152,8 +152,8 @@ PytorchModel: !!python/object:__main__.WakeWordSubModel
               gAKKCmz8nEb5IGqoUBkugAJN6QMugAJ9cQAoWBAAAABwcm90b2NvbF92ZXJzaW9ucQFN6QNYDQAA
               AGxpdHRsZV9lbmRpYW5xAohYCgAAAHR5cGVfc2l6ZXNxA31xBChYBQAAAHNob3J0cQVLAlgDAAAA
               aW50cQZLBFgEAAAAbG9uZ3EHSwR1dS6AAihYBwAAAHN0b3JhZ2VxAGN0b3JjaApGbG9hdFN0b3Jh
-              Z2UKcQFYCQAAADM2NTM3MzUyMHECWAMAAABjcHVxA0oAgAEATnRxBFEugAJdcQBYCQAAADM2NTM3
-              MzUyMHEBYS4AgAEAAAAAAHakrjwtD706VCpdPVA2t7zyAIY9QXVavUakDz3QSYk9PZZsvTQlYj0m
+              Z2UKcQFYCQAAADIyNzAwNDc2OHECWAMAAABjcHVxA0oAgAEATnRxBFEugAJdcQBYCQAAADIyNzAw
+              NDc2OHEBYS4AgAEAAAAAAHakrjwtD706VCpdPVA2t7zyAIY9QXVavUakDz3QSYk9PZZsvTQlYj0m
               rTy8LV13PdlPiDwl1li7ZnHyPXylAzy66TG+1bbePUaiQb28g5m9P/c3O8JcEzz/92e8/Z3EvKHV
               T713VIC9gHa/vao70bwqunQ8zYCRvGX6Ab2VjDY9cEzbO/kImznJTwE93tFBuwu6vLykia28Y7OH
               vVdf3zwvr3W8mYGqvf5YQTy9dwI97h+FvfGG1r3UPoC8aUIEvPBN9ryyE448a1f8vTQj0bwV8vs8
@@ -7103,8 +7103,8 @@ PytorchModel: !!python/object:__main__.WakeWordSubModel
               gAKKCmz8nEb5IGqoUBkugAJN6QMugAJ9cQAoWBAAAABwcm90b2NvbF92ZXJzaW9ucQFN6QNYDQAA
               AGxpdHRsZV9lbmRpYW5xAohYCgAAAHR5cGVfc2l6ZXNxA31xBChYBQAAAHNob3J0cQVLAlgDAAAA
               aW50cQZLBFgEAAAAbG9uZ3EHSwR1dS6AAihYBwAAAHN0b3JhZ2VxAGN0b3JjaApGbG9hdFN0b3Jh
-              Z2UKcQFYCQAAADM2OTE4NzM0NHECWAMAAABjcHVxA0tATnRxBFEugAJdcQBYCQAAADM2OTE4NzM0
-              NHEBYS5AAAAAAAAAALP6YDwvuvQ9y6e7PM0JXD2cNsg9irovPIdv+r3PP9u90wExPaTiqr1HK6I9
+              Z2UKcQFYCQAAADIxNzA5NjY3MnECWAMAAABjcHVxA0tATnRxBFEugAJdcQBYCQAAADIxNzA5NjY3
+              MnEBYS5AAAAAAAAAALP6YDwvuvQ9y6e7PM0JXD2cNsg9irovPIdv+r3PP9u90wExPaTiqr1HK6I9
               UEJYPeOY2jxkLb08b5PaPcaXgT2/YLI9GWqjPEfZ7r0+ruk7BmoevEhFAj72hBq9KO5VvVj3gTwx
               Qrg9Dq51uyx5+z3yQrm8jfnXvbOZTLyeUJY8K+9mPbfZdD3+faE9jKUAPpdndj2FcbO8QQS2PVe6
               D72b7Nc8uzdWvHPHdz0Tfzs93vW9vUcXrrxrTPM9dblMPXTBF71Etcm9iKjDPZZxcb21n0k6W9nQ
@@ -7127,8 +7127,8 @@ PytorchModel: !!python/object:__main__.WakeWordSubModel
               gAKKCmz8nEb5IGqoUBkugAJN6QMugAJ9cQAoWBAAAABwcm90b2NvbF92ZXJzaW9ucQFN6QNYDQAA
               AGxpdHRsZV9lbmRpYW5xAohYCgAAAHR5cGVfc2l6ZXNxA31xBChYBQAAAHNob3J0cQVLAlgDAAAA
               aW50cQZLBFgEAAAAbG9uZ3EHSwR1dS6AAihYBwAAAHN0b3JhZ2VxAGN0b3JjaApGbG9hdFN0b3Jh
-              Z2UKcQFYCQAAADM1ODk1NTcyOHECWAMAAABjcHVxA00AEE50cQRRLoACXXEAWAkAAAAzNTg5NTU3
-              MjhxAWEuABAAAAAAAADg+PM9OwhhvE3hYL7vmeY8Rb+XPHGzVzuR/xI+YBCXPaEti7u4Uim+PCnJ
+              Z2UKcQFYCQAAADIyNzA0MTkzNnECWAMAAABjcHVxA00AEE50cQRRLoACXXEAWAkAAAAyMjcwNDE5
+              MzZxAWEuABAAAAAAAADg+PM9OwhhvE3hYL7vmeY8Rb+XPHGzVzuR/xI+YBCXPaEti7u4Uim+PCnJ
               PGAhHT72epS8ywYmvsBQRD6dCNw9kUMBvlO6QL3xB7W8sHlDvdp5ijsSB1m9+jHDPHTFQr3Tr/C7
               W1cUvd7Y0T1rwh0+qsHvvXjhKr3H1gy+zPBevehSwDwtuIc6hs9zvdaPHDzexQa+pGalvXxXmT2p
               hrE98jMHviDIQj5YSiK+SIruuwDZGb51MEe9yzLWPV86P73MfoW91sdHvr+Vbb1ErGO+LC0OvnzH
@@ -7467,8 +7467,8 @@ PytorchModel: !!python/object:__main__.WakeWordSubModel
               gAKKCmz8nEb5IGqoUBkugAJN6QMugAJ9cQAoWBAAAABwcm90b2NvbF92ZXJzaW9ucQFN6QNYDQAA
               AGxpdHRsZV9lbmRpYW5xAohYCgAAAHR5cGVfc2l6ZXNxA31xBChYBQAAAHNob3J0cQVLAlgDAAAA
               aW50cQZLBFgEAAAAbG9uZ3EHSwR1dS6AAihYBwAAAHN0b3JhZ2VxAGN0b3JjaApGbG9hdFN0b3Jh
-              Z2UKcQFYCQAAADM2NTM2ODM1MnECWAMAAABjcHVxA0sBTnRxBFEugAJdcQBYCQAAADM2NTM2ODM1
-              MnEBYS4BAAAAAAAAAOpevzs=
+              Z2UKcQFYCQAAADIyNDcxNDAwMHECWAMAAABjcHVxA0sBTnRxBFEugAJdcQBYCQAAADIyNDcxNDAw
+              MHEBYS4BAAAAAAAAAOpevzs=
           - 0
           - !!python/tuple
             - 1
@@ -7487,8 +7487,8 @@ PytorchModel: !!python/object:__main__.WakeWordSubModel
               gAKKCmz8nEb5IGqoUBkugAJN6QMugAJ9cQAoWBAAAABwcm90b2NvbF92ZXJzaW9ucQFN6QNYDQAA
               AGxpdHRsZV9lbmRpYW5xAohYCgAAAHR5cGVfc2l6ZXNxA31xBChYBQAAAHNob3J0cQVLAlgDAAAA
               aW50cQZLBFgEAAAAbG9uZ3EHSwR1dS6AAihYBwAAAHN0b3JhZ2VxAGN0b3JjaApGbG9hdFN0b3Jh
-              Z2UKcQFYCQAAADM2NTM3MjM4NHECWAMAAABjcHVxA0tATnRxBFEugAJdcQBYCQAAADM2NTM3MjM4
-              NHEBYS5AAAAAAAAAAOipt75ZxZm+ix+DPhr79T2aeYO+RHoFvINCdL68qbe+UetZPmULez4ZjGe+
+              Z2UKcQFYCQAAADIyODc1NDg4MHECWAMAAABjcHVxA0tATnRxBFEugAJdcQBYCQAAADIyODc1NDg4
+              MHEBYS5AAAAAAAAAAOipt75ZxZm+ix+DPhr79T2aeYO+RHoFvINCdL68qbe+UetZPmULez4ZjGe+
               +S0+PqNjZzzw7gK/h+cCPnzKpz41nYA+D/ckPnRkfz17Lce+tDgBPpihOD6A60Y+YSMfu+YXtTuN
               AVm+TsGuPvZeh76zCRU9d64OPF4UYT4cmIQ+NxWPOfZEU778kuY9x/HUPuvTYz5b7Yq9crf9PUgv
               b74DRhG/M3DPPVlRNz5/yKC+KrGGvlNpkz5Z0K2+dEQUPhzuur4SIZ8+pcj9PDpNlj04tPS8rCik
@@ -7544,8 +7544,8 @@ PytorchModel: !!python/object:__main__.WakeWordSubModel
               gAKKCmz8nEb5IGqoUBkugAJN6QMugAJ9cQAoWBAAAABwcm90b2NvbF92ZXJzaW9ucQFN6QNYDQAA
               AGxpdHRsZV9lbmRpYW5xAohYCgAAAHR5cGVfc2l6ZXNxA31xBChYBQAAAHNob3J0cQVLAlgDAAAA
               aW50cQZLBFgEAAAAbG9uZ3EHSwR1dS6AAihYBwAAAHN0b3JhZ2VxAGN0b3JjaApGbG9hdFN0b3Jh
-              Z2UKcQFYCQAAADM2OTM0NTYxNnECWAMAAABjcHVxA0tATnRxBFEugAJdcQBYCQAAADM2OTM0NTYx
-              NnEBYS5AAAAAAAAAAGbtdr2TMsC90f2AvbbgHTszJcm8uObTuyZgTL03IFa97hM4vYR/P7yr4oK9
+              Z2UKcQFYCQAAADIyNTYxODAwMHECWAMAAABjcHVxA0tATnRxBFEugAJdcQBYCQAAADIyNTYxODAw
+              MHEBYS5AAAAAAAAAAGbtdr2TMsC90f2AvbbgHTszJcm8uObTuyZgTL03IFa97hM4vYR/P7yr4oK9
               klKRvYp/B70VKzC8CSBVvXlrbb12ZNq8pBU5u5m6Xr3Fr4G9EeScvQHBa7yLgHm9649pvURVX735
               TPW7mUuFvU9Qlb2m+GW8Tutcvf4Z87vtdDW9gBqBvb2NiL0asZe9ednGvf6m8Tq6Rqs8n0p0vdKQ
               Fb3wRD29HFp5vfrPpLqVpig82o24u9XA5Tp1RI69j16CvWQczL2mQju7f62ivcq8D7yZevS8yFac
@@ -7568,8 +7568,8 @@ PytorchModel: !!python/object:__main__.WakeWordSubModel
               gAKKCmz8nEb5IGqoUBkugAJN6QMugAJ9cQAoWBAAAABwcm90b2NvbF92ZXJzaW9ucQFN6QNYDQAA
               AGxpdHRsZV9lbmRpYW5xAohYCgAAAHR5cGVfc2l6ZXNxA31xBChYBQAAAHNob3J0cQVLAlgDAAAA
               aW50cQZLBFgEAAAAbG9uZ3EHSwR1dS6AAihYBwAAAHN0b3JhZ2VxAGN0b3JjaApGbG9hdFN0b3Jh
-              Z2UKcQFYCQAAADM1NzA3NzIwMHECWAMAAABjcHVxA0tATnRxBFEugAJdcQBYCQAAADM1NzA3NzIw
-              MHEBYS5AAAAAAAAAAAPxhj9woYQ/orGEP+7hgT9mNoI/oYWGP3Jvcj8Qo3I/CwSDP4vEhT8+zm4/
+              Z2UKcQFYCQAAADIyNzA0MTI5NnECWAMAAABjcHVxA0tATnRxBFEugAJdcQBYCQAAADIyNzA0MTI5
+              NnEBYS5AAAAAAAAAAAPxhj9woYQ/orGEP+7hgT9mNoI/oYWGP3Jvcj8Qo3I/CwSDP4vEhT8+zm4/
               H0eGPydmjj87i4A/+UqIPwmWij9lWoE/HHmEP71ygT92qoE/0dprP+oujj8b9H4/KW6DP5e7hT/p
               x4c/U7x9P0uhhz8iJ4Q/v/luP3EziD/DS3Q/htWBP0jWgj9ukIA/N7mBP8ixgz/8P4k/PO2JPzBD
               iT9lb3s/A1iIP60Vhj9WS4M/3WeHP/sXhj/z3oI/6AJyP2zZdD8lLoE/cGtoP4CSij+gpIU/MMuD
@@ -7625,8 +7625,8 @@ PytorchModel: !!python/object:__main__.WakeWordSubModel
               gAKKCmz8nEb5IGqoUBkugAJN6QMugAJ9cQAoWBAAAABwcm90b2NvbF92ZXJzaW9ucQFN6QNYDQAA
               AGxpdHRsZV9lbmRpYW5xAohYCgAAAHR5cGVfc2l6ZXNxA31xBChYBQAAAHNob3J0cQVLAlgDAAAA
               aW50cQZLBFgEAAAAbG9uZ3EHSwR1dS6AAihYBwAAAHN0b3JhZ2VxAGN0b3JjaApGbG9hdFN0b3Jh
-              Z2UKcQFYCQAAADM1NTgyNDk3NnECWAMAAABjcHVxA0tATnRxBFEugAJdcQBYCQAAADM1NTgyNDk3
-              NnEBYS5AAAAAAAAAACOJRbw8Gh0+mtgIPBXYYz1Sn+k9IAGMvQ6KVT0MWm09dAGNPJYIBT2I2TY9
+              Z2UKcQFYCQAAADIyNjk0MzI2NHECWAMAAABjcHVxA0tATnRxBFEugAJdcQBYCQAAADIyNjk0MzI2
+              NHEBYS5AAAAAAAAAACOJRbw8Gh0+mtgIPBXYYz1Sn+k9IAGMvQ6KVT0MWm09dAGNPJYIBT2I2TY9
               pz+CO1nngL1Z4Q09YPVnvGvhvz1x6MA9zOMAPLTKibyKojw+e3muuxk7WT3EG449IexfvR3rd725
               t4I9usfcPVJYVzxOwPi8ZfRnvQOLvD22GfI8AKIjvm5oMD3SdIk9IdKQPfpaiD3U3Jk9M4L/PKZC
               3jwk25O8xT9iPZ2WFD0PMQM90I+EPb2b6D2wpSo+gyafPAgC+zwieIk9Hd5zvfz1gb1id3U8EPFd
@@ -7649,7 +7649,7 @@ PytorchModel: !!python/object:__main__.WakeWordSubModel
               gAKKCmz8nEb5IGqoUBkugAJN6QMugAJ9cQAoWBAAAABwcm90b2NvbF92ZXJzaW9ucQFN6QNYDQAA
               AGxpdHRsZV9lbmRpYW5xAohYCgAAAHR5cGVfc2l6ZXNxA31xBChYBQAAAHNob3J0cQVLAlgDAAAA
               aW50cQZLBFgEAAAAbG9uZ3EHSwR1dS6AAihYBwAAAHN0b3JhZ2VxAGN0b3JjaApGbG9hdFN0b3Jh
-              Z2UKcQFYCQAAADM1NzM2NzEyMHECWAMAAABjcHVxA0tATnRxBFEugAJdcQBYCQAAADM1NzM2NzEy
+              Z2UKcQFYCQAAADIxNTk0MTA0MHECWAMAAABjcHVxA0tATnRxBFEugAJdcQBYCQAAADIxNTk0MTA0
               MHEBYS5AAAAAAAAAADGlqz+a8qg/7LuRP8Nmgz9u5Zg/BDJrP1DckT8vpqg/+IuSP+QMoD/6O44/
               sJmKP9ZhZj86HsA/EveMP9ginD/fzJ8/KgKLPxHXgz8y86s/7WiPPw1nkT8c1Zc/xtViP0evaD/E
               jZo/VuihPz0Onj+ETYA/thNrP5xCmj91iZU/1c1EP5Ahlz/FY5E/fsypP4f3jj9rTIY/NoCPP8H0
@@ -7771,7 +7771,7 @@ PytorchModel: !!python/object:__main__.WakeWordSubModel
   _state_dict_pre_hooks: !!python/object/apply:collections.OrderedDict
   - []
   training: false
-Stamp: cdc695be
+Stamp: 05d43bf4
 Version: 1.0.0
 WriterConfig:
   Namespace: null

@@ -34,7 +34,7 @@ struct config2 : nnet::dense_config {
     static const unsigned n_out = 64;
     static const unsigned io_type = nnet::io_parallel;
     static const unsigned strategy = nnet::resource;
-    static const unsigned reuse_factor = 768;
+    static const unsigned reuse_factor = 1536;
     static const unsigned n_zeros = 0;
     static const unsigned n_nonzeros = 98304;
     static const unsigned multiplier_limit = DIV_ROUNDUP(n_in * n_out, reuse_factor) - n_zeros / reuse_factor;
@@ -56,7 +56,7 @@ struct config3 : nnet::layernorm_config {
     static const unsigned axis = 1;
     static const unsigned epsilon_power_of_10 = 5;
     static const unsigned table_range_power2 = 0;
-    static const unsigned table_size = 8192;
+    static const unsigned table_size = 1024;
     typedef ln1_accum_t accum_t;
     typedef ln1_bias_t bias_t;
     typedef ln1_scale_t scale_t;
@@ -104,7 +104,7 @@ struct config6 : nnet::layernorm_config {
     static const unsigned axis = 1;
     static const unsigned epsilon_power_of_10 = 5;
     static const unsigned table_range_power2 = 0;
-    static const unsigned table_size = 8192;
+    static const unsigned table_size = 1024;
     typedef ln2_accum_t accum_t;
     typedef ln2_bias_t bias_t;
     typedef ln2_scale_t scale_t;

@@ -52,9 +52,10 @@ CLOCK_PERIOD = 20  # ns (50 MHz)
 # reduce to ap_fixed<18,12> or ap_fixed<16,10> to save resources after validation.
 DEFAULT_PRECISION = "ap_fixed<16,10>"
 # PYNQ-Z2 has 220 DSPs and 53K LUTs.
-# Linear(1536,128) fully parallel needs 196K multipliers — impossible.
-# reuse_factor=256 → ~768 multipliers/cycle (shared via LUTs). Adjust as needed.
-DEFAULT_REUSE_FACTOR = 768
+# Without DATAFLOW, layers execute sequentially and share DSPs.
+# Peak DSP = max(fc1_multipliers, fc2_multipliers).
+# rf=1536 for fc1: mult_limit=128 DSPs; rf=128 for fc2: 128 DSPs. Both fit 220.
+DEFAULT_REUSE_FACTOR = 1536
 STRATEGY = "Resource"  # "Latency" won't fit on PYNQ-Z2 for this model
 
 
@@ -214,8 +215,9 @@ def convert_to_hls(pt_model, model_name, output_dir):
     config["Model"]["Strategy"] = STRATEGY
 
     # ── Per-layer ReuseFactor for fc1 ──
-    # fc1 (1536→hidden) can use a larger RF since n_in=1536 >> hidden.
-    fc1_rf = DEFAULT_REUSE_FACTOR  # 1024
+    # fc1 (1536→hidden) can use a larger RF since n_in=1536.
+    # rf=1536 → mult_limit=128 DSPs, well within PYNQ-Z2's 220 DSPs.
+    fc1_rf = DEFAULT_REUSE_FACTOR  # 1536
     if "fc1" in config.get("LayerName", {}):
         config["LayerName"]["fc1"]["ReuseFactor"] = fc1_rf
 
@@ -228,8 +230,8 @@ def convert_to_hls(pt_model, model_name, output_dir):
                 "default": DEFAULT_PRECISION,
                 "accum": LAYERNORM_ACCUM,
             }
-            config["LayerName"][ln_name]["table_size"] = 8192
-            config["LayerName"][ln_name]["table_t"] = LAYERNORM_ACCUM
+            config["LayerName"][ln_name]["table_size"] = 1024
+            config["LayerName"][ln_name]["table_t"] = "ap_fixed<18,8>"
 
     print(f"\n  hls4ml config for '{model_name}':")
     print(f"    Precision:    {DEFAULT_PRECISION}")
@@ -258,6 +260,7 @@ def convert_to_hls(pt_model, model_name, output_dir):
     # Patch generated code for synthesis compatibility
     patch_layernorm_table_range(output_dir)
     patch_io_pragmas(output_dir, model_name)
+    patch_build_script(output_dir)
 
     return hls_model
 
@@ -271,7 +274,7 @@ def convert_to_hls(pt_model, model_name, output_dir):
 
 
 def patch_io_pragmas(output_dir, model_name):
-    """Remove full ARRAY_RESHAPE on large input and fix interface pragmas."""
+    """Remove full ARRAY_RESHAPE on large input, fix interface, remove DATAFLOW."""
     cpp_path = os.path.join(output_dir, "firmware", f"{model_name}.cpp")
     if not os.path.exists(cpp_path):
         print(f"  WARNING: {cpp_path} not found, skipping IO pragma patch")
@@ -282,25 +285,35 @@ def patch_io_pragmas(output_dir, model_name):
 
     original = content
 
-    # Remove ARRAY_RESHAPE complete on input x — DenseResource doesn't need it
+    # Remove ARRAY_RESHAPE complete on input x — DenseResource doesn't need it.
+    # Without this, synthesis tries to elaborate 1536 elements into registers.
     content = content.replace(
         "#pragma HLS ARRAY_RESHAPE variable=x complete dim=0\n",
         "",
     )
 
-    # Replace ap_vld (scalar protocol on array = 1536 ports) with ap_none.
-    # For PYNQ deployment, you'd later wrap this with AXI via Vivado block design.
+    # Replace ap_vld (scalar protocol on array = 1536 ports) with BRAM interface.
+    # ap_vld on x[1536] creates 1536 individual ports; BRAM uses a single port.
     content = content.replace(
         "#pragma HLS INTERFACE ap_vld port=x,layer9_out",
-        "#pragma HLS INTERFACE ap_none port=x\n"
+        "#pragma HLS INTERFACE bram port=x\n"
         "    #pragma HLS INTERFACE ap_vld port=layer9_out\n"
         "    #pragma HLS INTERFACE ap_ctrl_hs port=return",
+    )
+
+    # Remove DATAFLOW pragma — global weight arrays (w2, b2, s3, ...) violate
+    # DATAFLOW's requirement that data flows only through function arguments.
+    # This causes 10+ HLS 214-113 warnings and may cause pre-synthesis failure.
+    # Without DATAFLOW, layers execute sequentially (higher latency but synthesizable).
+    content = content.replace(
+        "    #pragma HLS DATAFLOW\n",
+        "",
     )
 
     if content != original:
         with open(cpp_path, "w") as f:
             f.write(content)
-        print(f"  Patched IO pragmas: removed ARRAY_RESHAPE on input, fixed interface")
+        print(f"  Patched: removed ARRAY_RESHAPE on x, BRAM interface, no DATAFLOW")
     else:
         print(f"  WARNING: IO pragma patterns not found in {cpp_path}")
 
@@ -359,20 +372,26 @@ void init_invsqrt_table(typename CONFIG_T::table_t table_out[CONFIG_T::table_siz
 
 template <typename CONFIG_T>
 typename CONFIG_T::table_t lookup_invsqrt(typename CONFIG_T::accum_t var) {
-    // Compute epsilon at compile time
+    #pragma HLS INLINE
+    // Compute epsilon
     float eps = 1.0f;
     for (unsigned p = 0; p < CONFIG_T::epsilon_power_of_10; ++p) {
-        #pragma HLS UNROLL
         eps *= 0.1f;
     }
-    // Initialize table (only once, stored in BRAM)
+    // Initialize table — use hls4ml convention:
+    // Non-static during synthesis so the tool can infer ROM from initialization.
+    // Static during C simulation so the table persists across calls.
+#ifdef __HLS_SYN__
+    bool initialized = false;
+    typename CONFIG_T::table_t invsqrt_table[CONFIG_T::table_size];
+#else
     static bool initialized = false;
     static typename CONFIG_T::table_t invsqrt_table[CONFIG_T::table_size];
+#endif
     if (!initialized) {
         init_invsqrt_table<CONFIG_T>(invsqrt_table);
         initialized = true;
     }
-    #pragma HLS RESOURCE variable=invsqrt_table core=ROM_nP_LUTRAM
     // Clamp and compute index
     float var_f = (float)var;
     if (var_f < eps) var_f = eps;
@@ -473,6 +492,29 @@ LAYERNORM_SEQ_LOOP:
 } // namespace nnet
 #endif
 """
+
+
+def patch_build_script(output_dir):
+    """Disable cosim and validation in build_prj.tcl for faster synthesis iteration."""
+    tcl_path = os.path.join(output_dir, "build_prj.tcl")
+    if not os.path.exists(tcl_path):
+        print(f"  WARNING: {tcl_path} not found, skipping build script patch")
+        return
+
+    with open(tcl_path, "r") as f:
+        content = f.read()
+
+    original = content
+
+    # Disable cosim (RTL co-simulation is very slow for large designs)
+    content = content.replace("    cosim      1", "    cosim      0")
+    # Disable validation (depends on cosim)
+    content = content.replace("    validation 1", "    validation 0")
+
+    if content != original:
+        with open(tcl_path, "w") as f:
+            f.write(content)
+        print(f"  Patched build_prj.tcl: disabled cosim and validation")
 
 
 def patch_layernorm_table_range(output_dir):

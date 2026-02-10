@@ -43,20 +43,26 @@ void init_invsqrt_table(typename CONFIG_T::table_t table_out[CONFIG_T::table_siz
 
 template <typename CONFIG_T>
 typename CONFIG_T::table_t lookup_invsqrt(typename CONFIG_T::accum_t var) {
-    // Compute epsilon at compile time
+    #pragma HLS INLINE
+    // Compute epsilon
     float eps = 1.0f;
     for (unsigned p = 0; p < CONFIG_T::epsilon_power_of_10; ++p) {
-        #pragma HLS UNROLL
         eps *= 0.1f;
     }
-    // Initialize table (only once, stored in BRAM)
+    // Initialize table — use hls4ml convention:
+    // Non-static during synthesis so the tool can infer ROM from initialization.
+    // Static during C simulation so the table persists across calls.
+#ifdef __HLS_SYN__
+    bool initialized = false;
+    typename CONFIG_T::table_t invsqrt_table[CONFIG_T::table_size];
+#else
     static bool initialized = false;
     static typename CONFIG_T::table_t invsqrt_table[CONFIG_T::table_size];
+#endif
     if (!initialized) {
         init_invsqrt_table<CONFIG_T>(invsqrt_table);
         initialized = true;
     }
-    #pragma HLS RESOURCE variable=invsqrt_table core=ROM_nP_LUTRAM
     // Clamp and compute index
     float var_f = (float)var;
     if (var_f < eps) var_f = eps;
