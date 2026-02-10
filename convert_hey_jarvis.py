@@ -42,14 +42,15 @@ import hls4ml
 
 # ── Configuration ────────────────────────────────────────────────────────────
 ONNX_MODEL_PATH = None  # Auto-detected from openwakeword below
-OUTPUT_DIR_PRIMARY = "hey_jarvis_primary_hls"
-OUTPUT_DIR_VERIFIER = "hey_jarvis_verifier_hls"
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_DIR_PRIMARY = os.path.join(_SCRIPT_DIR, "hey_jarvis_primary_hls")
+OUTPUT_DIR_VERIFIER = os.path.join(_SCRIPT_DIR, "hey_jarvis_verifier_hls")
 FPGA_PART = "xc7z020clg400-1"  # PYNQ-Z2
-CLOCK_PERIOD = 10  # ns (100 MHz)
+CLOCK_PERIOD = 20  # ns (50 MHz)
 # With 1536 inputs, Dense accumulations can reach ±1536+.
 # Need at least 12 integer bits. 32-bit fixed gives good accuracy;
 # reduce to ap_fixed<18,12> or ap_fixed<16,10> to save resources after validation.
-DEFAULT_PRECISION = "ap_fixed<32,16>"
+DEFAULT_PRECISION = "ap_fixed<16,10>"
 # PYNQ-Z2 has 220 DSPs and 53K LUTs.
 # Linear(1536,128) fully parallel needs 196K multipliers — impossible.
 # reuse_factor=256 → ~768 multipliers/cycle (shared via LUTs). Adjust as needed.

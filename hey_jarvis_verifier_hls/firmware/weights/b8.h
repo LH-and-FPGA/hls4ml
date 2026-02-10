@@ -9,7 +9,7 @@
 #ifndef __SYNTHESIS__
 fc3_bias_t b8[1];
 #else
-fc3_bias_t b8[1] = {0.0058401720598340};
+fc3_bias_t b8[1] = {0.005840};
 
 #endif
 
