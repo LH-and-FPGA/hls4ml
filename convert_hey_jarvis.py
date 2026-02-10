@@ -255,10 +255,54 @@ def convert_to_hls(pt_model, model_name, output_dir):
     hls_model.write()
     print(f"  HLS project written to: {output_dir}/")
 
-    # Patch LayerNorm for wider variance range (table only covers [eps, 1.0])
+    # Patch generated code for synthesis compatibility
     patch_layernorm_table_range(output_dir)
+    patch_io_pragmas(output_dir, model_name)
 
     return hls_model
+
+
+# ── Post-process: fix io_parallel pragmas for large input arrays ─────────────
+# io_parallel generates ARRAY_RESHAPE complete on x[1536], creating a 24,576-bit
+# register and 1536 ap_vld ports. DenseResource kernel only reads one element per
+# cycle (stride access), so full partitioning is unnecessary and causes
+# "Pre-synthesis failed" in Vitis HLS. We remove the ARRAY_RESHAPE on the input
+# and switch to a BRAM interface.
+
+
+def patch_io_pragmas(output_dir, model_name):
+    """Remove full ARRAY_RESHAPE on large input and fix interface pragmas."""
+    cpp_path = os.path.join(output_dir, "firmware", f"{model_name}.cpp")
+    if not os.path.exists(cpp_path):
+        print(f"  WARNING: {cpp_path} not found, skipping IO pragma patch")
+        return
+
+    with open(cpp_path, "r") as f:
+        content = f.read()
+
+    original = content
+
+    # Remove ARRAY_RESHAPE complete on input x — DenseResource doesn't need it
+    content = content.replace(
+        "#pragma HLS ARRAY_RESHAPE variable=x complete dim=0\n",
+        "",
+    )
+
+    # Replace ap_vld (scalar protocol on array = 1536 ports) with ap_none.
+    # For PYNQ deployment, you'd later wrap this with AXI via Vivado block design.
+    content = content.replace(
+        "#pragma HLS INTERFACE ap_vld port=x,layer9_out",
+        "#pragma HLS INTERFACE ap_none port=x\n"
+        "    #pragma HLS INTERFACE ap_vld port=layer9_out\n"
+        "    #pragma HLS INTERFACE ap_ctrl_hs port=return",
+    )
+
+    if content != original:
+        with open(cpp_path, "w") as f:
+            f.write(content)
+        print(f"  Patched IO pragmas: removed ARRAY_RESHAPE on input, fixed interface")
+    else:
+        print(f"  WARNING: IO pragma patterns not found in {cpp_path}")
 
 
 # ── Post-process: patch LayerNorm for C simulation ───────────────────────────

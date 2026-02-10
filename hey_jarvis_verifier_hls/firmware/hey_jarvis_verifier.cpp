@@ -10,9 +10,10 @@ void hey_jarvis_verifier(
 ) {
 
     // hls-fpga-machine-learning insert IO
-    #pragma HLS ARRAY_RESHAPE variable=x complete dim=0
-    #pragma HLS ARRAY_PARTITION variable=layer9_out complete dim=0
-    #pragma HLS INTERFACE ap_vld port=x,layer9_out 
+        #pragma HLS ARRAY_PARTITION variable=layer9_out complete dim=0
+    #pragma HLS INTERFACE ap_none port=x
+    #pragma HLS INTERFACE ap_vld port=layer9_out
+    #pragma HLS INTERFACE ap_ctrl_hs port=return 
     #pragma HLS DATAFLOW
 
     // hls-fpga-machine-learning insert load weights
