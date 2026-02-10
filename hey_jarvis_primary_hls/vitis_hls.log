@@ -1,0 +1,103 @@
+INFO: Applying HLS Y2K22 patch v1.2 for IP revision
+INFO: [HLS 200-10] Running 'D:/Xilinx/Vitis_HLS/2020.2/bin/unwrapped/win64.o/vitis_hls.exe'
+INFO: [HLS 200-10] For user 'han' on host 'lihan' (Windows NT_amd64 version 6.2) on Tue Feb 10 00:03:47 +0000 2026
+INFO: [HLS 200-10] In directory 'D:/Code/hls4ml/hey_jarvis_primary_hls'
+Sourcing Tcl script 'D:/Code/hls4ml/hey_jarvis_primary_hls/hey_jarvis_primary_prj/solution1/csynth.tcl'
+INFO: [HLS 200-1510] Running: open_project hey_jarvis_primary_prj 
+INFO: [HLS 200-10] Opening project 'D:/Code/hls4ml/hey_jarvis_primary_hls/hey_jarvis_primary_prj'.
+INFO: [HLS 200-1510] Running: set_top hey_jarvis_primary 
+INFO: [HLS 200-1510] Running: add_files firmware/hey_jarvis_primary.cpp -cflags -std=c++0x 
+INFO: [HLS 200-10] Adding design file 'firmware/hey_jarvis_primary.cpp' to the project
+INFO: [HLS 200-1510] Running: add_files -tb tb_data -cflags -Wno-unknown-pragmas -csimflags -Wno-unknown-pragmas 
+INFO: [HLS 200-10] Adding test bench file 'tb_data' to the project
+INFO: [HLS 200-1510] Running: add_files -tb firmware/weights -cflags -Wno-unknown-pragmas -csimflags -Wno-unknown-pragmas 
+INFO: [HLS 200-10] Adding test bench file 'firmware/weights' to the project
+INFO: [HLS 200-1510] Running: add_files -tb hey_jarvis_primary_test.cpp -cflags -std=c++0x -Wno-unknown-pragmas -csimflags -Wno-unknown-pragmas 
+INFO: [HLS 200-10] Adding test bench file 'hey_jarvis_primary_test.cpp' to the project
+INFO: [HLS 200-1510] Running: open_solution solution1 -flow_target vivado 
+INFO: [HLS 200-10] Opening solution 'D:/Code/hls4ml/hey_jarvis_primary_hls/hey_jarvis_primary_prj/solution1'.
+INFO: [SYN 201-201] Setting up clock 'default' with a period of 10ns.
+INFO: [SYN 201-201] Setting up clock 'default' with an uncertainty of 1.25ns.
+INFO: [HLS 200-10] Setting target device to 'xc7z020-clg400-1'
+INFO: [HLS 200-1505] Using flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see www.xilinx.com/cgi-bin/docs/rdoc?v=2020.2;t=hls+guidance;d=200-1505.html
+INFO: [HLS 200-1464] Running solution command: config_compile -name_max_length=80
+INFO: [XFORM 203-1161] The maximum of name length is set into 80.
+INFO: [HLS 200-1464] Running solution command: config_schedule -enable_dsp_full_reg=0
+INFO: [HLS 200-1510] Running: set_part xc7z020-clg400-1 
+INFO: [XFORM 203-1161] The maximum of name length is set into 80.
+INFO: [HLS 200-1510] Running: create_clock -period 10 -name default 
+INFO: [HLS 200-1510] Running: config_compile -name_max_length 80 
+INFO: [XFORM 203-1161] The maximum of name length is set into 80.
+INFO: [HLS 200-1510] Running: config_schedule -enable_dsp_full_reg=0 
+INFO: [HLS 200-1510] Running: set_clock_uncertainty 12.5% 
+INFO: [HLS 200-1510] Running: set_directive_top -name hey_jarvis_primary hey_jarvis_primary 
+INFO: [HLS 200-1510] Running: csynth_design 
+INFO: [HLS 200-111] Finished File checks and directory preparation: CPU user time: 0 seconds. CPU system time: 0 seconds. Elapsed time: 0.068 seconds; current allocated memory: 946.293 MB.
+INFO: [HLS 200-10] Analyzing design file 'firmware/hey_jarvis_primary.cpp' ... 
+WARNING: [HLS 214-113] Either use an argument of the function or declare the variable inside the dataflow loop body: firmware/hey_jarvis_primary.cpp:61:61
+Resolution: For help on HLS 214-113 see www.xilinx.com/cgi-bin/docs/rdoc?v=2020.2;t=hls+guidance;d=214-113.html
+WARNING: [HLS 214-113] Either use an argument of the function or declare the variable inside the dataflow loop body: firmware/hey_jarvis_primary.cpp:61:65
+Resolution: For help on HLS 214-113 see www.xilinx.com/cgi-bin/docs/rdoc?v=2020.2;t=hls+guidance;d=214-113.html
+WARNING: [HLS 214-113] Either use an argument of the function or declare the variable inside the dataflow loop body: firmware/hey_jarvis_primary.cpp:63:83
+Resolution: For help on HLS 214-113 see www.xilinx.com/cgi-bin/docs/rdoc?v=2020.2;t=hls+guidance;d=214-113.html
+WARNING: [HLS 214-113] Either use an argument of the function or declare the variable inside the dataflow loop body: firmware/hey_jarvis_primary.cpp:63:87
+Resolution: For help on HLS 214-113 see www.xilinx.com/cgi-bin/docs/rdoc?v=2020.2;t=hls+guidance;d=214-113.html
+WARNING: [HLS 214-113] Either use an argument of the function or declare the variable inside the dataflow loop body: firmware/hey_jarvis_primary.cpp:67:74
+Resolution: For help on HLS 214-113 see www.xilinx.com/cgi-bin/docs/rdoc?v=2020.2;t=hls+guidance;d=214-113.html
+WARNING: [HLS 214-113] Either use an argument of the function or declare the variable inside the dataflow loop body: firmware/hey_jarvis_primary.cpp:67:78
+Resolution: For help on HLS 214-113 see www.xilinx.com/cgi-bin/docs/rdoc?v=2020.2;t=hls+guidance;d=214-113.html
+WARNING: [HLS 214-113] Either use an argument of the function or declare the variable inside the dataflow loop body: firmware/hey_jarvis_primary.cpp:69:83
+Resolution: For help on HLS 214-113 see www.xilinx.com/cgi-bin/docs/rdoc?v=2020.2;t=hls+guidance;d=214-113.html
+WARNING: [HLS 214-113] Either use an argument of the function or declare the variable inside the dataflow loop body: firmware/hey_jarvis_primary.cpp:69:87
+Resolution: For help on HLS 214-113 see www.xilinx.com/cgi-bin/docs/rdoc?v=2020.2;t=hls+guidance;d=214-113.html
+WARNING: [HLS 214-113] Either use an argument of the function or declare the variable inside the dataflow loop body: firmware/hey_jarvis_primary.cpp:73:74
+Resolution: For help on HLS 214-113 see www.xilinx.com/cgi-bin/docs/rdoc?v=2020.2;t=hls+guidance;d=214-113.html
+WARNING: [HLS 214-113] Either use an argument of the function or declare the variable inside the dataflow loop body: firmware/hey_jarvis_primary.cpp:73:78
+Resolution: For help on HLS 214-113 see www.xilinx.com/cgi-bin/docs/rdoc?v=2020.2;t=hls+guidance;d=214-113.html
+WARNING: [HLS 200-471] Dataflow form checks found 10 issue(s) in file firmware/hey_jarvis_primary.cpp
+Resolution: For help on HLS 200-471 see www.xilinx.com/cgi-bin/docs/rdoc?v=2020.2;t=hls+guidance;d=200-471.html
+WARNING: [HLS 207-5301] unused parameter 'keep': firmware/nnet_utils/nnet_helpers.h:285:99
+WARNING: [HLS 207-5301] unused parameter 'data': firmware/nnet_utils/nnet_function_stubs.h:14:36
+WARNING: [HLS 207-5301] unused parameter 'buffer': firmware/nnet_utils/nnet_function_stubs.h:15:36
+WARNING: [HLS 207-5301] unused parameter 'partition': firmware/nnet_utils/nnet_function_stubs.h:16:44
+WARNING: [HLS 207-5301] unused parameter 'data': firmware/nnet_utils/nnet_function_stubs.h:24:24
+WARNING: [HLS 207-5301] unused parameter 'buffer': firmware/nnet_utils/nnet_function_stubs.h:25:24
+WARNING: [HLS 207-5301] unused parameter 'partition': firmware/nnet_utils/nnet_function_stubs.h:26:32
+WARNING: [HLS 207-5301] unused parameter 'data': firmware/nnet_utils/nnet_function_stubs.h:33:30
+WARNING: [HLS 207-5301] unused parameter 'res': firmware/nnet_utils/nnet_function_stubs.h:33:58
+WARNING: [HLS 207-5301] unused parameter 'weights': firmware/nnet_utils/nnet_function_stubs.h:34:51
+WARNING: [HLS 207-5301] unused parameter 'biases': firmware/nnet_utils/nnet_function_stubs.h:35:49
+WARNING: [HLS 207-5301] unused parameter 'data': firmware/nnet_utils/nnet_function_stubs.h:42:30
+WARNING: [HLS 207-5301] unused parameter 'res': firmware/nnet_utils/nnet_function_stubs.h:42:58
+WARNING: [HLS 207-5301] unused parameter 'weights': firmware/nnet_utils/nnet_function_stubs.h:43:51
+WARNING: [HLS 207-5301] unused parameter 'biases': firmware/nnet_utils/nnet_function_stubs.h:44:49
+WARNING: [HLS 207-5301] unused parameter 'data': firmware/nnet_utils/nnet_function_stubs.h:51:29
+WARNING: [HLS 207-5301] unused parameter 'res': firmware/nnet_utils/nnet_function_stubs.h:51:80
+WARNING: [HLS 207-5301] unused parameter 'weights': firmware/nnet_utils/nnet_function_stubs.h:52:50
+WARNING: [HLS 207-5301] unused parameter 'biases': firmware/nnet_utils/nnet_function_stubs.h:53:48
+WARNING: [HLS 207-5301] unused parameter 'data': firmware/nnet_utils/nnet_code_gen.h:16:39
+WARNING: [HLS 207-5301] unused parameter 'res': firmware/nnet_utils/nnet_code_gen.h:17:38
+WARNING: [HLS 207-5301] unused parameter 'weights': firmware/nnet_utils/nnet_code_gen.h:18:60
+WARNING: [HLS 207-5301] unused parameter 'biases': firmware/nnet_utils/nnet_code_gen.h:19:58
+WARNING: [HLS 207-5528] unexpected pragma argument 'instances', expects function/operation: firmware/nnet_utils/nnet_activation.h:402:24
+WARNING: [HLS 207-5510] 'Resource pragma' is deprecated, and it will be removed in future release. It is suggested to replace it with 'bind_op/bind_storage pragma'.: firmware/nnet_utils/nnet_dense_resource.h:33:9
+WARNING: [HLS 207-5510] 'Resource pragma' is deprecated, and it will be removed in future release. It is suggested to replace it with 'bind_op/bind_storage pragma'.: firmware/nnet_utils/nnet_dense_resource.h:107:9
+WARNING: [HLS 207-5510] 'Resource pragma' is deprecated, and it will be removed in future release. It is suggested to replace it with 'bind_op/bind_storage pragma'.: firmware/nnet_utils/nnet_dense_resource.h:189:9
+WARNING: [HLS 207-5530] Unsupported interface port data type in '#pragma HLS interface ap_vld': firmware/hey_jarvis_primary.cpp:15:35
+WARNING: [HLS 207-5530] Unsupported interface port data type in '#pragma HLS interface ap_vld': firmware/hey_jarvis_primary.cpp:15:37
+INFO: [HLS 200-111] Finished Source Code Analysis and Preprocessing: CPU user time: 1 seconds. CPU system time: 0 seconds. Elapsed time: 42.042 seconds; current allocated memory: 168.752 MB.
+INFO: [HLS 200-777] Using interface defaults for 'Vivado' flow target.
+INFO: [HLS 200-111] Finished Command csynth_design CPU user time: 1 seconds. CPU system time: 0 seconds. Elapsed time: 458.349 seconds; current allocated memory: 307.140 MB.
+Pre-synthesis failed.
+    while executing
+"source D:/Code/hls4ml/hey_jarvis_primary_hls/hey_jarvis_primary_prj/solution1/csynth.tcl"
+    invoked from within
+"hls::main D:/Code/hls4ml/hey_jarvis_primary_hls/hey_jarvis_primary_prj/solution1/csynth.tcl"
+    ("uplevel" body line 1)
+    invoked from within
+"uplevel 1 hls::main {*}$newargs"
+    (procedure "hls_proc" line 16)
+    invoked from within
+"hls_proc [info nameofexecutable] $argv"
+INFO: [HLS 200-112] Total CPU user time: 3 seconds. Total CPU system time: 1 seconds. Total elapsed time: 459.761 seconds; peak allocated memory: 946.293 MB.
